@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze UI - Fast and Easy-to-Use UI Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .demos {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .demos h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .demo-link {
+            display: block;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .demo-link:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .demo-link h3 {
+            margin-bottom: 10px;
+        }
+
+        .demo-link p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .cta-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .github-button {
+            background: #333;
+        }
+
+        .github-button:hover {
+            background: #555;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Blaze UI</h1>
+            <p class="subtitle">A Fast and Easy-to-Use UI Library</p>
+            <p>Combines the simplicity of React with the performance of Svelte and the reactivity of SolidJS</p>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>⚡ Reactive State Management</h3>
+                <p>Components automatically update when state changes—no need for manual reconciliation. Built-in reactivity system inspired by SolidJS.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Simplified API</h3>
+                <p>Fewer concepts to learn, with intuitive state and effect handling. No complex hooks or lifecycle methods to worry about.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 High Performance</h3>
+                <p>Optimized for speed and small bundle size using compile-time optimizations. Faster than React with smaller bundles.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🛠️ Built-in Features</h3>
+                <p>Routing, state management, animations, forms, and UI components all included. No need for additional libraries.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔧 Developer Tools</h3>
+                <p>Hot reloading, time travel debugging, and visual component tree inspection. Excellent development experience.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📝 TypeScript Support</h3>
+                <p>First-class support for type-safe development with comprehensive TypeScript definitions and IntelliSense.</p>
+            </div>
+        </div>
+
+        <div class="demos">
+            <h2>🎮 Try the Demos</h2>
+            <div class="demo-grid">
+                <a href="/demo/simple-test.html" class="demo-link">
+                    <h3>Simple Test</h3>
+                    <p>Basic functionality test with component showcase</p>
+                </a>
+                <a href="/demo/advanced-demo.html" class="demo-link">
+                    <h3>Advanced Demo</h3>
+                    <p>Comprehensive showcase of all features</p>
+                </a>
+                <a href="/demo/index.html" class="demo-link">
+                    <h3>Interactive Demo</h3>
+                    <p>Interactive examples and playground</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="cta">
+            <a href="https://github.com/your-username/blaze-ui" class="cta-button github-button">View on GitHub</a>
+            <a href="/demo/simple-test.html" class="cta-button">Get Started</a>
+        </div>
+
+        <div class="footer">
+            <p>Blaze UI is licensed under the MIT License</p>
+            <p>Inspired by React, Svelte, SolidJS, and other modern UI libraries</p>
+        </div>
+    </div>
+</body>
+</html> 

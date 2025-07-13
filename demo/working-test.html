@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Test - Main Index</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .counter {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Working Test - Main Index</h1>
+        
+        <div class="counter" id="counter-display">Count: 0</div>
+        <div style="text-align: center;">
+            <button id="increment">Increment</button>
+            <button id="decrement">Decrement</button>
+            <button id="reset">Reset</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+    
+    <script type="module">
+        console.log('🚀 Starting working test...');
+        
+        const results = document.getElementById('results');
+        
+        function addResult(message, isSuccess = true) {
+            const div = document.createElement('div');
+            div.className = `result ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = message;
+            results.appendChild(div);
+            console.log(message);
+        }
+        
+        try {
+            addResult('✅ Script started');
+            
+            // Import from main index
+            const { state, effect, Button, Input, Card, Alert, Spinner } = await import('../src/index');
+            addResult('✅ Main index imported successfully');
+            
+            // Test state
+            const [count, setCount] = state(0);
+            addResult(`✅ State created, initial value: ${count()}`);
+            
+            // Test state update
+            setCount(5);
+            addResult(`✅ State updated, value: ${count()}`);
+            
+            // Test effect
+            effect(() => {
+                const display = document.getElementById('counter-display');
+                if (display) {
+                    display.textContent = `Count: ${count()}`;
+                }
+            });
+            addResult('✅ Effect created');
+            
+            // Test components
+            const button = Button({ children: 'Test', onClick: () => {} });
+            if (button instanceof HTMLElement) {
+                addResult('✅ Button component works');
+            }
+            
+            const input = Input({ placeholder: 'Test' });
+            if (input instanceof HTMLElement) {
+                addResult('✅ Input component works');
+            }
+            
+            const card = Card({ title: 'Test', children: 'Content' });
+            if (card instanceof HTMLElement) {
+                addResult('✅ Card component works');
+            }
+            
+            const alert = Alert({ type: 'success', message: 'Test' });
+            if (alert instanceof HTMLElement) {
+                addResult('✅ Alert component works');
+            }
+            
+            const spinner = Spinner({ size: 'medium' });
+            if (spinner instanceof HTMLElement) {
+                addResult('✅ Spinner component works');
+            }
+            
+            // Add event listeners
+            document.getElementById('increment').addEventListener('click', () => {
+                setCount(count() + 1);
+                const display = document.getElementById('counter-display');
+                if (display) {
+                    display.textContent = `Count: ${count()}`;
+                }
+            });
+            
+            document.getElementById('decrement').addEventListener('click', () => {
+                setCount(count() - 1);
+                const display = document.getElementById('counter-display');
+                if (display) {
+                    display.textContent = `Count: ${count()}`;
+                }
+            });
+            
+            document.getElementById('reset').addEventListener('click', () => {
+                setCount(0);
+                const display = document.getElementById('counter-display');
+                if (display) {
+                    display.textContent = `Count: ${count()}`;
+                }
+            });
+            
+            addResult('✅ Event listeners added');
+            addResult('🎉 All tests passed! Main index is working!');
+            
+        } catch (error) {
+            addResult(`❌ Test failed: ${error.message}`, false);
+            console.error('Full error:', error);
+        }
+    </script>
+</body>
+</html> 

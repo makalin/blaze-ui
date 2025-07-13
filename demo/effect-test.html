@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Effect Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Effect Test</h1>
+        <div id="results"></div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="test-btn">Test Effect</button>
+        </div>
+    </div>
+    
+    <script type="module">
+        console.log('🚀 Starting effect test...');
+        
+        const results = document.getElementById('results');
+        
+        function addResult(message, isSuccess = true) {
+            const div = document.createElement('div');
+            div.className = `result ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = message;
+            results.appendChild(div);
+            console.log(message);
+        }
+        
+        try {
+            addResult('✅ Script started');
+            
+            // Import only state first
+            addResult('🔄 Importing state...');
+            const { state } = await import('../src/core/reactivity.ts');
+            addResult('✅ State imported');
+            
+            // Create state
+            const [count, setCount] = state(0);
+            addResult(`✅ State created, value: ${count()}`);
+            
+            // Test state update
+            setCount(5);
+            addResult(`✅ State updated, value: ${count()}`);
+            
+            // Now try to import effect
+            addResult('🔄 Importing effect...');
+            const { effect } = await import('../src/core/reactivity.ts');
+            addResult('✅ Effect imported');
+            
+            // Test simple effect
+            addResult('🔄 Creating simple effect...');
+            let effectRunCount = 0;
+            effect(() => {
+                effectRunCount++;
+                console.log(`Effect ran ${effectRunCount} times, count is: ${count()}`);
+            });
+            addResult(`✅ Simple effect created, ran ${effectRunCount} times`);
+            
+            // Test effect with DOM update
+            addResult('🔄 Creating DOM effect...');
+            effect(() => {
+                const display = document.getElementById('results');
+                if (display) {
+                    const lastResult = display.lastElementChild;
+                    if (lastResult) {
+                        lastResult.textContent += ` (Effect triggered, count: ${count()})`;
+                    }
+                }
+            });
+            addResult('✅ DOM effect created');
+            
+            // Test button
+            document.getElementById('test-btn').addEventListener('click', () => {
+                addResult('🔄 Button clicked, updating state...');
+                setCount(count() + 1);
+                addResult(`✅ State updated to ${count()}`);
+            });
+            
+            addResult('🎉 Effect test completed!');
+            
+        } catch (error) {
+            addResult(`❌ Test failed: ${error.message}`, false);
+            console.error('Full error:', error);
+        }
+    </script>
+</body>
+</html> 

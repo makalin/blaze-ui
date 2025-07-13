@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze UI Simple Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+        }
+        
+        .test-section h2 {
+            color: #555;
+            margin-top: 0;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Blaze UI - Simple Test</h1>
+        <div id="test-results"></div>
+    </div>
+    
+    <script type="module">
+        import { 
+            state, 
+            effect, 
+            createStore, 
+            useStore,
+            Button,
+            Input,
+            Card,
+            Alert,
+            Spinner,
+            createForm,
+            validationRules,
+            animations
+        } from '../src/index';
+
+        // Initialize dev tools (commented out to avoid issues)
+        // initDevTools();
+
+        // Test results container
+        const testResults = document.getElementById('test-results');
+        const results = [];
+
+        function addResult(test, success, message) {
+            results.push({ test, success, message });
+            console.log(`${success ? '✅' : '❌'} ${test}: ${message || (success ? 'PASSED' : 'FAILED')}`);
+        }
+
+        // Test 1: Basic reactivity
+        try {
+            const [count, setCount] = state(0);
+            let testValue = 0;
+            
+            // Test initial state
+            testValue = count();
+            if (testValue !== 0) {
+                addResult('Basic Reactivity', false, `Expected 0, got ${testValue}`);
+            } else {
+                // Test state update
+                setCount(5);
+                testValue = count();
+                
+                if (testValue === 5) {
+                    addResult('Basic Reactivity', true);
+                } else {
+                    addResult('Basic Reactivity', false, `Expected 5, got ${testValue}`);
+                }
+            }
+        } catch (error) {
+            addResult('Basic Reactivity', false, error.message);
+        }
+
+        // Test 2: Store
+        try {
+            const store = createStore({ name: 'Test', value: 0 });
+            const [getValue, setValue] = useStore(store);
+            
+            setValue(prev => ({ ...prev, value: 10 }));
+            
+            if (getValue().value === 10) {
+                addResult('Store Management', true);
+            } else {
+                addResult('Store Management', false, `Expected 10, got ${getValue().value}`);
+            }
+        } catch (error) {
+            addResult('Store Management', false, error.message);
+        }
+
+        // Test 3: Components
+        try {
+            const button = Button({
+                children: 'Test Button',
+                onClick: () => console.log('Button clicked')
+            });
+            
+            if (button instanceof HTMLElement && button.tagName === 'BUTTON') {
+                addResult('Button Component', true);
+            } else {
+                addResult('Button Component', false, 'Button not created correctly');
+            }
+        } catch (error) {
+            addResult('Button Component', false, error.message);
+        }
+
+        // Test 4: Input Component
+        try {
+            const input = Input({
+                placeholder: 'Test input',
+                onChange: (value) => console.log('Input value:', value)
+            });
+            
+            if (input instanceof HTMLElement && input.tagName === 'INPUT') {
+                addResult('Input Component', true);
+            } else {
+                addResult('Input Component', false, 'Input not created correctly');
+            }
+        } catch (error) {
+            addResult('Input Component', false, error.message);
+        }
+
+        // Test 5: Card Component
+        try {
+            const card = Card({
+                title: 'Test Card',
+                children: 'Card content'
+            });
+            
+            if (card instanceof HTMLElement) {
+                addResult('Card Component', true);
+            } else {
+                addResult('Card Component', false, 'Card not created correctly');
+            }
+        } catch (error) {
+            addResult('Card Component', false, error.message);
+        }
+
+        // Test 6: Alert Component
+        try {
+            const alert = Alert({
+                type: 'success',
+                message: 'Test alert'
+            });
+            
+            if (alert instanceof HTMLElement) {
+                addResult('Alert Component', true);
+            } else {
+                addResult('Alert Component', false, 'Alert not created correctly');
+            }
+        } catch (error) {
+            addResult('Alert Component', false, error.message);
+        }
+
+        // Test 7: Spinner Component
+        try {
+            const spinner = Spinner({ size: 'medium' });
+            
+            if (spinner instanceof HTMLElement) {
+                addResult('Spinner Component', true);
+            } else {
+                addResult('Spinner Component', false, 'Spinner not created correctly');
+            }
+        } catch (error) {
+            addResult('Spinner Component', false, error.message);
+        }
+
+        // Test 8: Form System
+        try {
+            const form = createForm({
+                initialValues: { test: '' },
+                validation: { test: validationRules.required }
+            });
+            
+            if (form && typeof form.submitForm === 'function') {
+                addResult('Form System', true);
+            } else {
+                addResult('Form System', false, 'Form not created correctly');
+            }
+        } catch (error) {
+            addResult('Form System', false, error.message);
+        }
+
+        // Test 9: Animation System
+        try {
+            const testElement = document.createElement('div');
+            const cancelAnimation = animations.fadeIn(testElement, 100);
+            
+            if (typeof cancelAnimation === 'function') {
+                addResult('Animation System', true);
+                cancelAnimation(); // Clean up
+            } else {
+                addResult('Animation System', false, 'Animation not working correctly');
+            }
+        } catch (error) {
+            addResult('Animation System', false, error.message);
+        }
+
+        // Display results
+        const passedTests = results.filter(r => r.success).length;
+        const totalTests = results.length;
+        
+        testResults.innerHTML = `
+            <div class="test-section">
+                <h2>Test Results: ${passedTests}/${totalTests} Tests Passed</h2>
+                ${results.map(result => `
+                    <div class="${result.success ? 'success' : 'error'}">
+                        ${result.success ? '✅' : '❌'} ${result.test}
+                        ${result.message ? `: ${result.message}` : ''}
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="test-section">
+                <h2>Component Showcase</h2>
+                <div id="component-showcase"></div>
+            </div>
+        `;
+
+        // Add component showcase
+        const showcase = document.getElementById('component-showcase');
+        if (showcase) {
+            // Add some components to the showcase
+            showcase.appendChild(Button({
+                children: 'Primary Button',
+                variant: 'primary',
+                onClick: () => alert('Primary button clicked!')
+            }));
+            
+            showcase.appendChild(document.createElement('br'));
+            showcase.appendChild(document.createElement('br'));
+            
+            showcase.appendChild(Input({
+                placeholder: 'Type something...',
+                onChange: (value) => console.log('Input value:', value)
+            }));
+            
+            showcase.appendChild(document.createElement('br'));
+            showcase.appendChild(document.createElement('br'));
+            
+            showcase.appendChild(Spinner({ size: 'medium' }));
+            
+            showcase.appendChild(document.createElement('br'));
+            showcase.appendChild(document.createElement('br'));
+            
+            showcase.appendChild(Alert({
+                type: 'info',
+                message: 'This is a test alert!',
+                dismissible: true
+            }));
+        }
+
+        console.log('🎉 All tests completed! Check the page for results.');
+    </script>
+</body>
+</html> 
